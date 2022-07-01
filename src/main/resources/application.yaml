@@ -1,0 +1,142 @@
+# server:
+#   port: 8081
+
+# ---
+
+# spring:
+#   profiles: default
+#   datasource:
+#     url: jdbc:mariadb://localhost:23306/goodteam
+#     driver-class-name: org.mariadb.jdbc.Driver
+#     username: admin
+#     password: pcEOf4qg8J
+#   jpa:
+#     properties:
+#       hibernate:
+#         show_sql: true
+#         format_sql: true
+#   cloud:
+#     stream:
+#       kafka:
+#         binder:
+#           replicationFactor: 1
+#           auto-create-topics: true
+#           brokers: localhost:9092
+#         streams:
+#           binder:
+#             configuration:
+#               default:
+#                 key:
+#                   serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#                 value:
+#                   serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#       bindings:
+#         binding-in-sse:
+#           destination: evpowerguard
+#           content-type: application/json
+#           group: ev
+#         binding-out-sse:
+#           destination: evpowerguard
+#           content-type: application/json
+#           group: ev
+# logging:
+#   level:
+#     org.hibernate.type: trace
+#     org.springframework.cloud: debug    
+
+
+# ---
+
+
+server:
+  port: 8080
+
+---
+
+spring:
+  profiles: default
+  jpa:
+    properties:
+      hibernate:
+        "[show_sql]": true
+        "[format_sql]": true
+  cloud:
+    stream:
+      kafka:
+        binder:
+          replicationFactor: 1
+          auto-create-topics: true
+          brokers: goodteam-mq-kafka.edu-common:9092
+        streams:
+          binder:
+            configuration:
+              default:
+                key:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+      bindings:
+        binding-in-sse:
+          destination: evpowerguard
+          content-type: application/json
+          group: ev
+        binding-out-sse:
+          destination: evpowerguard
+          content-type: application/json
+          group: ev
+  datasource:
+    url: jdbc:mariadb://localhost:23306/goodteam
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: admin
+    password: pcEOf4qg8J
+
+logging:
+  level:
+    "[org.hibernate.type]": trace
+    "[org.hibernate.SQL]": trace
+    "[org.springframework.cloud]": debug
+
+---
+
+spring:
+  profiles: dev
+  jpa:
+    properties:
+      hibernate:
+        "[show_sql]": true
+        "[format_sql]": true
+  cloud:          
+    stream:
+      kafka:
+        binder:
+          replicationFactor: 1
+          auto-create-topics: true
+          brokers: goodteam-mq-kafka.edu-common:9092
+        streams:
+          binder:
+            configuration:
+              default:
+                key:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+      bindings:
+        binding-in-sse:
+          group: ev
+          destination: evpowerguard
+          contentType: application/json
+        binding-out-sse:
+          group: ev
+          destination: evpowerguard
+          contentType: application/json
+  datasource:
+    url: jdbc:mariadb://goodteam-db-mariadb.edu-common:3306/goodteam
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: admin
+    password: pcEOf4qg8J
+
+logging:
+  level:
+    "[org.hibernate.type]": trace
+    "[org.hibernate.SQL]": trace
+    "[org.springframework.cloud]": debug
